@@ -1,6 +1,9 @@
 /* Inter Font from Goole Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
 
+html:focus-within {
+    scroll-behavior: smooth !important;
+  }
 /* VARIABLES */
 :root {
     --accent-color: #47ebeb;
@@ -351,4 +354,21 @@ footer .social a:hover svg {
     text-align: center;
     min-height: 240px;
     margin-bottom: 20px;
+}
+
+#scrollToTopBtn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 5px;
+    display: none;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+    background-color: transparent;
+}
+
+#scrollToTopBtn:hover {
 }
