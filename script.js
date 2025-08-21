@@ -82,15 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
     animatedElements.forEach(el => observer.observe(el));
 });
 
-// Header background on scroll
-window.addEventListener('scroll', () => {
-    const header = document.querySelector('header');
-    if (window.pageYOffset > 50) {
-        header.style.background = 'rgba(10, 10, 10, 0.98)';
-    } else {
-        header.style.background = 'rgba(10, 10, 10, 0.95)';
-    }
-});
+// Header background on scroll - removed color change to keep consistent white background
 
 // Mobile menu toggle (if needed in the future)
 function toggleMobileMenu() {
@@ -112,6 +104,71 @@ document.addEventListener('DOMContentLoaded', () => {
             heroContent.style.transform = 'translateY(0)';
         }, 100);
     }
+});
+
+// Contact Form Handling
+document.addEventListener('DOMContentLoaded', () => {
+    const contactForm = document.getElementById('contactForm');
+    const submitBtn = contactForm.querySelector('.submit-btn');
+    const btnText = submitBtn.querySelector('.btn-text');
+    const btnLoading = submitBtn.querySelector('.btn-loading');
+
+    contactForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        // Check honeypot field (if filled, it's likely a bot)
+        const honeypotField = contactForm.querySelector('#website');
+        if (honeypotField && honeypotField.value.trim() !== '') {
+            console.log('Bot detected via honeypot');
+            return;
+        }
+        
+        // Show loading state
+        submitBtn.disabled = true;
+        btnText.style.display = 'none';
+        btnLoading.style.display = 'flex';
+        
+        // Remove any existing messages
+        const existingMessage = contactForm.querySelector('.form-message');
+        if (existingMessage) {
+            existingMessage.remove();
+        }
+        
+        try {
+            const formData = new FormData(contactForm);
+            const response = await fetch(contactForm.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+            
+            if (response.ok) {
+                // Success message
+                const successMessage = document.createElement('div');
+                successMessage.className = 'form-message success';
+                successMessage.textContent = 'Thank you! Your message has been sent successfully. I\'ll get back to you soon!';
+                contactForm.insertBefore(successMessage, contactForm.firstChild);
+                
+                // Reset form
+                contactForm.reset();
+            } else {
+                throw new Error('Failed to send message');
+            }
+        } catch (error) {
+            // Error message
+            const errorMessage = document.createElement('div');
+            errorMessage.className = 'form-message error';
+            errorMessage.textContent = 'Sorry, there was an error sending your message. Please try again or email me directly.';
+            contactForm.insertBefore(errorMessage, contactForm.firstChild);
+        } finally {
+            // Reset button state
+            submitBtn.disabled = false;
+            btnText.style.display = 'inline';
+            btnLoading.style.display = 'none';
+        }
+    });
 });
 
 // Add hover effects for project cards
