@@ -14,9 +14,9 @@ html {
 
 :root {
     /* Color Palette - Modern White/Light Theme */
-    --primary-bg: #ffffff;
-    --secondary-bg: #f8fafc;
-    --card-bg: #ffffff;
+    --primary-bg: #f5f5f5;
+    --secondary-bg: #f0f2f5;
+    --card-bg: #fafafa;
     --accent-color: #3b82f6;
     --accent-secondary: #1d4ed8;
     --accent-hover: #2563eb;
@@ -26,7 +26,7 @@ html {
     --border-color: #e2e8f0;
     --gradient-primary: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 50%, #2563eb 100%);
     --gradient-secondary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-    --gradient-card: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+    --gradient-card: linear-gradient(145deg, #fafafa 0%, #f0f2f5 100%);
     
     /* Typography */
     --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -98,7 +98,7 @@ header {
     top: 0;
     left: 0;
     right: 0;
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(245, 245, 245, 0.95);
     backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border-color);
     z-index: 1000;
@@ -251,20 +251,7 @@ main {
     box-shadow: var(--shadow-sm);
 }
 
-.social-link::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: var(--gradient-primary);
-    transition: left 0.3s ease;
-}
-
-.social-link:hover::before {
-    left: 0;
-}
+/* Removed the blue hover animation from social links */
 
 .social-link:hover {
     transform: translateY(-2px);
@@ -281,7 +268,7 @@ main {
 }
 
 .social-link:hover svg {
-    color: var(--primary-bg);
+    color: var(--accent-color);
 }
 
 /* Resume Button */
