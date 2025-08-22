@@ -789,7 +789,7 @@ report_utilization -file sv_utilization_synth.rpt</code></pre>
 
                     <h3>Challenge 1: Pin Constraint Reality</h3>
 
-                    <p>When transitioning from synthesis to implementation (place and route), we encountered our first
+                    <p>When transitioning from synthesis to implementation (place and route), I encountered my first
                         real-world constraint:</p>
 
                     <div class="code-block">
@@ -813,7 +813,7 @@ but needs 64 sites.
                         for power, ground, and dedicated configuration pins.</p>
                     <h4>Solution: Hardware-Optimized Design</h4>
 
-                    <p>We modified the SystemVerilog core to internalize parameters and focus on essential
+                    <p>I modified the SystemVerilog core to internalize parameters and focus on essential
                         functionality:</p>
 
                     <div class="code-block">
@@ -975,7 +975,7 @@ set_property IOSTANDARD LVCMOS33 [get_ports Q_debug[2]]</code></pre>
 
                     <h2>Hardware Validation and Results</h2>
                     <h3>FPGA Programming and Testing</h3>
-                    <P>After successful implementation and bitstream generation, we programmed the PYNQ-Z2 board to
+                    <P>After successful implementation and bitstream generation, I programmed the PYNQ-Z2 board to
                         validate real hardware operation:</P>
                     <figure class="figure-container">
                         <img src="images/pwm-tutorial/Figure10.png" alt="Figure 7: PYNQ-Z2 Board Running SystemVerilog PWM Core" class="figure-image">
