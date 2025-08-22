@@ -25,20 +25,22 @@ navLinks.forEach(link => {
 });
 
 // Scroll to top functionality
-window.addEventListener('scroll', () => {
-    if (window.pageYOffset > 300) {
-        scrollToTopBtn.classList.add('visible');
-    } else {
-        scrollToTopBtn.classList.remove('visible');
-    }
-});
-
-scrollToTopBtn.addEventListener('click', () => {
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
+if (scrollToTopBtn) {
+    window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 300) {
+            scrollToTopBtn.classList.add('visible');
+        } else {
+            scrollToTopBtn.classList.remove('visible');
+        }
     });
-});
+
+    scrollToTopBtn.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+}
 
 // Active navigation highlighting
 window.addEventListener('scroll', () => {
@@ -109,9 +111,10 @@ document.addEventListener('DOMContentLoaded', () => {
 // Contact Form Handling
 document.addEventListener('DOMContentLoaded', () => {
     const contactForm = document.getElementById('contactForm');
-    const submitBtn = contactForm.querySelector('.submit-btn');
-    const btnText = submitBtn.querySelector('.btn-text');
-    const btnLoading = submitBtn.querySelector('.btn-loading');
+    if (contactForm) {
+        const submitBtn = contactForm.querySelector('.submit-btn');
+        const btnText = submitBtn.querySelector('.btn-text');
+        const btnLoading = submitBtn.querySelector('.btn-loading');
 
     contactForm.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -169,6 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
             btnLoading.style.display = 'none';
         }
     });
+    }
 });
 
 // Add hover effects for project cards

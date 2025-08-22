@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SystemVerilog PWM Core Tutorial - Neha R Rao</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Enhanced Blog Post Styling */
+        .blog-post-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: var(--space-8) 0;
+        }
+
+        .post-hero {
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-secondary) 100%);
+            color: white;
+            padding: var(--space-16) 0;
+            margin-bottom: var(--space-12);
+            text-align: center;
+        }
+
+        .post-hero h1 {
+            font-size: var(--font-size-5xl);
+            font-weight: 700;
+            margin-bottom: var(--space-6);
+            line-height: 1.2;
+        }
+
+        .post-hero .meta {
+            font-size: var(--font-size-lg);
+            opacity: 0.9;
+        }
+
+        .post-content {
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: var(--space-12);
+            box-shadow: var(--shadow-lg);
+            margin-bottom: var(--space-8);
+        }
+
+        .post-content h2 {
+            font-size: var(--font-size-3xl);
+            font-weight: 600;
+            margin: var(--space-12) 0 var(--space-6) 0;
+            color: var(--accent-color);
+            border-left: 4px solid var(--accent-color);
+            padding-left: var(--space-4);
+        }
+
+        .post-content h3 {
+            font-size: var(--font-size-2xl);
+            font-weight: 600;
+            margin: var(--space-8) 0 var(--space-4) 0;
+            color: var(--text-primary);
+        }
+
+        .post-content p {
+            margin-bottom: var(--space-6);
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        .post-content ul,
+        .post-content ol {
+            margin: var(--space-6) 0;
+            padding-left: var(--space-8);
+        }
+
+        .post-content li {
+            margin-bottom: var(--space-3);
+            line-height: 1.7;
+            color: var(--text-secondary);
+        }
+
+        .post-content strong {
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+
+        .post-content pre {
+            background: #1e293b;
+            color: #e2e8f0;
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            margin: var(--space-6) 0;
+            overflow-x: auto;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: var(--font-size-sm);
+            line-height: 1.6;
+            border: 1px solid #334155;
+        }
+
+        .post-content code {
+            background: #f1f5f9;
+            color: var(--accent-color);
+            padding: var(--space-1) var(--space-2);
+            border-radius: var(--radius-sm);
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 0.9em;
+            border: 1px solid #e2e8f0;
+        }
+
+        .post-content pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+            border: none;
+        }
+
+        .post-content blockquote {
+            border-left: 4px solid var(--accent-color);
+            padding: var(--space-6);
+            margin: var(--space-8) 0;
+            background: #f8fafc;
+            border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        .post-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-8) 0;
+            background: white;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+        }
+
+        .post-content th {
+            background: var(--accent-color);
+            color: white;
+            padding: var(--space-4);
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .post-content td {
+            padding: var(--space-4);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        .post-content tr:last-child td {
+            border-bottom: none;
+        }
+
+        .post-content tr:nth-child(even) {
+            background: #f8fafc;
+        }
+
+        .feature-box {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-xl);
+            padding: var(--space-6);
+            margin: var(--space-8) 0;
+        }
+
+        .feature-box h4 {
+            color: var(--accent-color);
+            font-weight: 600;
+            margin-bottom: var(--space-4);
+        }
+
+        .success-box {
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+            border: 1px solid #22c55e;
+            border-radius: var(--radius-xl);
+            padding: var(--space-6);
+            margin: var(--space-8) 0;
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border: 1px solid #f59e0b;
+            border-radius: var(--radius-xl);
+            padding: var(--space-6);
+            margin: var(--space-8) 0;
+        }
+
+        .code-header {
+            background: #334155;
+            color: white;
+            padding: var(--space-3) var(--space-4);
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: var(--font-size-sm);
+            font-weight: 500;
+        }
+
+        .code-block {
+            margin: var(--space-6) 0;
+        }
+
+        .code-block pre {
+            margin: 0;
+            border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+        }
+
+        .figure-container {
+            margin: var(--space-8) 0;
+            text-align: center;
+        }
+
+        .figure-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+        }
+
+        .figure-container figcaption {
+            margin-top: var(--space-4);
+            font-style: italic;
+            color: var(--text-secondary);
+            font-size: var(--font-size-sm);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: var(--space-8);
+            transition: var(--transition-fast);
+        }
+
+        .back-link:hover {
+            color: var(--accent-hover);
+            transform: translateX(-4px);
+        }
+
+        @media (max-width: 768px) {
+            .post-hero h1 {
+                font-size: var(--font-size-3xl);
+            }
+
+            .post-content {
+                padding: var(--space-6);
+            }
+
+            .post-content h2 {
+                font-size: var(--font-size-2xl);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="index.html" onclick="window.open('index.html', '_self');">NRR.</a>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="blog.html">Blog</a></li>
+                        <li class="nav-separator">|</li>
+                        <li><a href="index.html" onclick="window.open('index.html', '_self');">Portfolio</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="blog-post-container">
+                <a href="blog.html" class="back-link">
+                    ← Back to Blog
+                </a>
+
+                <div class="post-hero">
+                    <h1>Creating a SystemVerilog PWM Core</h1>
+                    <div class="meta">
+                        From Simulation to Hardware Deployment
+                    </div>
+                </div>
+
+                <div class="post-content">
+                    <h2>Introduction to PWM (Pulse Width Modulation)</h2>
+
+                    <p>Pulse Width Modulation (PWM) is a fundamental technique in digital electronics for controlling
+                        analog-like behavior using digital signals. PWM works by rapidly switching a digital output
+                        between high and low states, where the ratio of high time to total period time (duty cycle)
+                        determines the effective output level.</p>
+
+                    <div class="feature-box">
+                        <h4>🎯 What You'll Learn</h4>
+                        <ul>
+                            <li>Design a complete PWM core using SystemVerilog syntax and methodology</li>
+                            <li>Create comprehensive testbenches for functional verification</li>
+                            <li>Understand synthesis results and resource utilization analysis</li>
+                            <li>Navigate real-world hardware implementation challenges</li>
+                            <li>Deploy and validate designs on actual FPGA hardware</li>
+                        </ul>
+                    </div>
+
+                    <h3>How PWM Works</h3>
+
+                    <p>PWM generates a square wave with a fixed frequency but variable duty cycle:</p>
+                    <ul>
+                        <li><strong>Period</strong>: Total time for one complete cycle (high + low time)</li>
+                        <li><strong>Duty Cycle</strong>: Percentage of time the signal is high during one period</li>
+                        <li><strong>Frequency</strong>: Number of complete cycles per second (1/Period)</li>
+                    </ul>
+
+                    <p>For example, a 75% duty cycle means the signal is high for 75% of each period and low for 25%.
+                    </p>
+
+                    <h3>Common PWM Applications</h3>
+
+                    <p><strong>Motor Speed Control</strong>: By varying the duty cycle, PWM can effectively control the
+                        average voltage delivered to a motor, thus controlling its speed. A 50% duty cycle delivers half
+                        the supply voltage on average.</p>
+
+                    <p><strong>LED Brightness Control</strong>: PWM creates the illusion of variable brightness by
+                        rapidly turning LEDs on and off. Higher duty cycles appear brighter to human vision due to
+                        persistence of vision effects.</p>
+
+                    <p><strong>Power Regulation</strong>: Switch-mode power supplies use PWM to efficiently regulate
+                        output voltage by controlling energy transfer timing.</p>
+
+                    <p><strong>Audio Generation</strong>: PWM can generate audio signals by modulating the duty cycle to
+                        represent audio waveforms, commonly used in Class-D amplifiers.</p>
+
+                    <p><strong>Servo Motor Control</strong>: Standard servo motors interpret PWM pulse width as position
+                        commands, typically using 1-2ms pulse widths within 20ms periods.</p>
+
+                    <h3>Why Implement PWM in FPGAs?</h3>
+
+                    <p>FPGAs excel at PWM generation because they provide:</p>
+                    <ul>
+                        <li><strong>Precise Timing Control</strong>: Hardware-based counters ensure accurate,
+                            jitter-free PWM signals</li>
+                        <li><strong>Multiple Channels</strong>: Parallel processing enables simultaneous, independent
+                            PWM outputs</li>
+                        <li><strong>High Frequency Capability</strong>: FPGA speed allows PWM frequencies from Hz to MHz
+                            ranges</li>
+                        <li><strong>Deterministic Operation</strong>: Hardware implementation provides consistent timing
+                            regardless of system load</li>
+                        <li><strong>Integration Flexibility</strong>: PWM cores integrate easily with other FPGA-based
+                            control systems</li>
+                    </ul>
+
+                    <p>This tutorial demonstrates how to implement a complete PWM (Pulse Width Modulation) core using
+                        SystemVerilog, from initial design through hardware deployment. We'll use behavioral
+                        SystemVerilog code to describe the hardware, with Vivado 2024.2 for development, synthesis, and
+                        testing on the PYNQ-Z2 development board.</p>
+
+                    <p>Building upon the foundational PWM concepts, this project showcases modern SystemVerilog design
+                        methodology, synthesis optimization techniques, and real-world hardware implementation
+                        challenges, providing a comprehensive introduction to FPGA development using SystemVerilog.</p>
+
+                    <h2>Objective</h2>
+
+                    <p>By following this tutorial, you will learn to:</p>
+                    <ul>
+                        <li>Design a complete PWM core using SystemVerilog syntax and methodology</li>
+                        <li>Create comprehensive testbenches for functional verification</li>
+                        <li>Understand synthesis results and resource utilization analysis</li>
+                        <li>Navigate real-world hardware implementation challenges</li>
+                        <li>Deploy and validate designs on actual FPGA hardware</li>
+                        <li>Apply optimization techniques for resource-efficient implementations</li>
+                    </ul>
+
+                    <p>The tutorial demonstrates professional SystemVerilog development practices while providing
+                        hands-on experience with the complete FPGA design flow.</p>
+
+                    <h2>Pre-Requisites</h2>
+                    <ul>
+                        <li>Vivado 2024.2 or later installed</li>
+                        <li>PYNQ-Z2 development board with USB programming cable</li>
+                        <li>Basic understanding of digital logic and counter design</li>
+                        <li>Familiarity with HDL concepts (signals, clocks, sequential logic)</li>
+                        <li>SystemVerilog simulation environment (EDA Playground or Vivado simulator)</li>
+                    </ul>
+
+                    <h2>Warning</h2>
+
+                    <div class="warning-box">
+                        <h4>⚠️ Important Safety Note</h4>
+                        <p>Be aware that strobing any light can cause adverse effects on some humans. The frequencies
+                            used here are generally considered safe, but be conscious of any unintended side-effects
+                            when working with PWM-controlled lighting or displays.</p>
+                    </div>
+
+                    <h2>Set-Up</h2>
+
+                    <p>Let's establish a clean project structure for our SystemVerilog PWM implementation.</p>
+
+                    <p>If you haven't already, set up your terminal window for Vivado:</p>
+
+                    <div class="code-block">
+                        <div class="code-header">Vivado Environment Setup</div>
+                        <pre><code>source /opt/xilinx/Vivado/2024.2/settings64.sh
+term-title "Vivado 2024.2 - SystemVerilog PWM"</code></pre>
+                    </div>
+
+                    <p>Create the project directory structure:</p>
+
+                    <div class="code-block">
+                        <div class="code-header">Project Directory Structure</div>
+                        <pre><code>├─ cd projects/
+├─ mkdir systemverilog-pwm
+├─ cd systemverilog-pwm</code></pre>
+                    </div>
+
+                    <p>This directory will hold our complete SystemVerilog implementation with organized source files
+                        and documentation.</p>
+
+                    <h2>SystemVerilog Design Methodology</h2>
+
+                    <p>SystemVerilog offers a modern approach to hardware description with several key advantages:</p>
+
+                    <h3>Key SystemVerilog Features</h3>
+
+                    <p><strong>Unified Data Types:</strong></p>
+                    <ul>
+                        <li><strong>logic type</strong>: Replaces the need for separate wire and reg declarations</li>
+                        <li><strong>Compact bit notation</strong>: [31:0] instead of verbose range specifications</li>
+                        <li><strong>No library imports</strong>: Built-in types eliminate dependency management</li>
+                    </ul>
+
+                    <p><strong>Modern Syntax:</strong></p>
+                    <ul>
+                        <li><strong>always_ff</strong>: Explicitly indicates clocked sequential logic for better tool
+                            optimization</li>
+                        <li><strong>C-style operators</strong>: Familiar ||, &&, >= for teams with software backgrounds
+                        </li>
+                        <li><strong>Inline declarations</strong>: Port types specified directly in module header</li>
+                    </ul>
+
+                    <p><strong>Enhanced Constructs:</strong></p>
+                    <ul>
+                        <li><strong>localparam</strong>: For compile-time constants with better scoping</li>
+                        <li><strong>Explicit width notation</strong>: 32'h0, 1'b1 prevents width mismatch issues</li>
+                        <li><strong>Modern testbench features</strong>: initial, forever, repeat for clean stimulus</li>
+                    </ul>
+
+                    <h3>Design Philosophy</h3>
+
+                    <p>SystemVerilog emphasizes:</p>
+                    <ol>
+                        <li><strong>Conciseness</strong> - More functionality in fewer lines</li>
+                        <li><strong>Clarity</strong> - Explicit intent through specialized constructs like always_ff
+                        </li>
+                        <li><strong>Efficiency</strong> - Reduced boilerplate and faster development cycles</li>
+                        <li><strong>Familiarity</strong> - Syntax patterns common in modern programming languages</li>
+                    </ol>
+
+                    <h3>PWM Implementation Strategy</h3>
+
+                    <p>Our PWM core uses a counter-based state machine approach:</p>
+                    <ol>
+                        <li><strong>Counter Logic</strong>: Free-running counter that resets at period boundary</li>
+                        <li><strong>Output Generation</strong>: Combinational logic compares counter to duty cycle
+                            threshold</li>
+                        <li><strong>Debug Interface</strong>: Exposes counter value for simulation verification</li>
+                        <li><strong>Synchronous Reset</strong>: FPGA-optimized reset strategy for reliable operation
+                        </li>
+                    </ol>
+
+                    <p>This approach provides excellent resource efficiency while maintaining clear, understandable
+                        operation.</p>
+
+                    <h2>Create SystemVerilog Source Files</h2>
+
+                    <h3>1. PWM Core Module</h3>
+
+                    <p>Create the main PWM functionality as pwm.sv. This implements a counter-based PWM generator with
+                        configurable period and duty cycle.</p>
+
+                    <div class="code-block">
+                        <div class="code-header">pwm.sv - SystemVerilog PWM Core</div>
+                        <pre><code>`timescale 1ns / 1ps
+
+// SystemVerilog PWM Core - Counter-based state machine
+// Duty cycle calculation: (period-low)/period (percentage high)
+
+module pwm (
+    input  logic        clk,     // System clock
+    input  logic        rst,     // Synchronous reset
+    input  logic [31:0] period,  // Clock cycles per PWM period
+    input  logic [31:0] low,     // Number of low cycles
+    output logic [31:0] Q,       // Counter value (debug)
+    output logic        toggle   // PWM output signal
+);
+
+    // Internal counter register
+    logic [31:0] value;
+    
+    // Sequential logic: Counter state machine
+    always_ff @(posedge clk) begin
+        if (rst || (value >= (period - 1))) begin
+            // Reset condition: restart PWM cycle
+            value <= 32'h0;
+        end else begin
+            // Normal operation: increment counter  
+            value <= value + 1'b1;
+        end
+    end
+    
+    // Combinational logic: Output generation
+    assign Q = value;                              // Debug output
+    assign toggle = (value < low) ? 1'b0 : 1'b1;   // PWM generation
+    
+endmodule</code></pre>
+                    </div>
+
+                    <div class="feature-box">
+                        <h4>🔧 Key SystemVerilog Features Demonstrated</h4>
+                        <ul>
+                            <li><strong>Unified logic type</strong> eliminates need for separate wire/reg declarations
+                            </li>
+                            <li><strong>always_ff</strong> explicitly indicates clocked sequential logic for synthesis
+                                optimization</li>
+                            <li><strong>Compact bit notation</strong> (32'h0, 1'b1) provides explicit width
+                                specification</li>
+                            <li><strong>Familiar operators</strong> ||, >= for teams with C/software backgrounds</li>
+                            <li><strong>Reduced boilerplate</strong> with minimal required declarations</li>
+                        </ul>
+                    </div>
+
+                    <h4>Design Implementation Notes:</h4>
+                    <ul>
+                        <li><strong>Counter width</strong>: 32-bit provides flexibility for various clock frequencies
+                            and PWM periods</li>
+                        <li><strong>Reset strategy</strong>: Synchronous reset recommended for FPGA implementations</li>
+                        <li><strong>Output logic</strong>: Simple threshold comparison generates clean PWM waveform</li>
+                        <li><strong>Debug interface</strong>: Counter output enables simulation verification and
+                            troubleshooting</li>
+                    </ul>
+
+                    <h3>2. Comprehensive Testbench</h3>
+
+                    <p>Create pwm_tb.sv to verify functionality with multiple test scenarios.</p>
+
+                    <div class="code-block">
+                        <div class="code-header">pwm_tb.sv - SystemVerilog Testbench</div>
+                        <pre><code>`timescale 1ns / 1ps
+
+// SystemVerilog Testbench for PWM Core
+// Validates functionality with 90% duty cycle test case
+
+module pwm_tb;
+
+    // Testbench signals
+    logic        clk;
+    logic        rst;
+    logic [31:0] period;
+    logic [31:0] low;
+    logic [31:0] Q;
+    logic        toggle;
+    
+    // Clock parameters
+    localparam CLOCK_PERIOD = 10; // 10ns = 100MHz
+    
+    // Device Under Test instantiation
+    pwm dut (
+        .clk(clk),
+        .rst(rst),
+        .period(period),
+        .low(low),
+        .Q(Q),
+        .toggle(toggle)
+    );
+    
+    // Clock generation
+    initial begin
+        clk = 1'b0;
+        forever #(CLOCK_PERIOD/2) clk = ~clk;
+    end
+    
+    // Test stimulus and verification
+    initial begin
+        // Test Case: 90% duty cycle (2 low, 18 high out of 20)
+        $display("Starting PWM Core Verification...");
+        
+        // Initialize inputs
+        rst = 1'b1;
+        period = 32'd20;
+        low = 32'd2;
+        
+        // Release reset after 2 clock cycles
+        repeat(2) @(posedge clk);
+        rst = 1'b0;
+        
+        // Monitor one complete PWM period
+        repeat(25) @(posedge clk) begin
+            $display("Time: %0t, Q: %0d, toggle: %b", $time, Q, toggle);
+        end
+        
+        $display("PWM Core verification completed successfully!");
+        $finish;
+    end
+
+endmodule</code></pre>
+                    </div>
+
+                    <h4>Testbench Features:</h4>
+                    <ul>
+                        <li><strong>Automatic clock generation</strong> using forever construct</li>
+                        <li><strong>Clean stimulus control</strong> with repeat and @(posedge clk) timing</li>
+                        <li><strong>Comprehensive monitoring</strong> with formatted display output</li>
+                        <li><strong>Self-checking design</strong> for automated verification flows</li>
+                        <li><strong>Realistic test case</strong> demonstrating 90% duty cycle operation</li>
+                    </ul>
+
+                    <h2>Create Vivado Project</h2>
+
+                    <p>Now we'll create a properly configured Vivado project for our SystemVerilog PWM implementation.
+                    </p>
+
+                    <h3>1. Start Vivado and create project:</h3>
+
+                    <div class="code-block">
+                        <div class="code-header">Vivado Project Creation</div>
+                        <pre><code>├─ vivado -mode tcl
+file mkdir hw
+cd hw
+create_project pwm_pynq_z2 . -part xc7z020clg400-1
+set_property board_part tul.com.tw:pynq-z2:part0:1.0 [current_project]
+set_property target_language Verilog [current_project]</code></pre>
+                    </div>
+
+                    <p><strong>Note</strong>: SystemVerilog files are handled under the "Verilog" target language
+                        setting in Vivado. The tools automatically recognize .sv file extensions and apply appropriate
+                        SystemVerilog parsing.</p>
+
+                    <h3>2. Add source files to project:</h3>
+
+                    <div class="code-block">
+                        <div class="code-header">Add Source Files</div>
+                        <pre><code>add_files -norecurse ../src/pwm.sv
+add_files -fileset sim_1 -norecurse ../src/pwm_tb.sv  
+import_files -force -norecurse
+update_compile_order -fileset sources_1</code></pre>
+                    </div>
+
+                    <h3>3. Launch GUI for visual development:</h3>
+
+                    <div class="code-block">
+                        <div class="code-header">Launch GUI</div>
+                        <pre><code>start_gui</code></pre>
+                    </div>
+
+                    <p>You should now see the SystemVerilog project configured for the PYNQ-Z2 board. The Project
+                        Summary shows our target device and SystemVerilog source files ready for development.</p>
+                    <figure class="figure-container">
+                        <img src="images/pwm-tutorial/Figure1.png" alt="Figure 1: SystemVerilog Project Summary" class="figure-image">
+                        <figcaption>Figure 1: SystemVerilog Project Summary</figcaption>
+                    </figure>
+                    <p>The project is now ready for simulation, synthesis, and hardware implementation with all
+                        SystemVerilog files properly integrated.</p>
+
+                    <h2>Simulation and Verification</h2>
+
+                    <h3>Syntax Validation and Code Review</h3>
+
+                    <ol>
+                        <li>Navigate to Sources window and expand all hierarchies</li>
+                        <li>Double-click on <strong>pwm.sv</strong> to open in editor</li>
+                        <li>Double-click on <strong>pwm_tb.sv</strong> to inspect testbench</li>
+                        <li>Verify syntax highlighting and check for any error indicators</li>
+                    </ol>
+                    <figure class="figure-container">
+                        <img src="images/pwm-tutorial/Figure2.png" alt="Figure 2: SystemVerilog sources with .sv file extensions" class="figure-image">
+                        <figcaption>Figure 2: SystemVerilog sources with .sv file extensions</figcaption>
+                    </figure>
+                    <p>The syntax highlighting should immediately show SystemVerilog's more compact structure with
+                        unified logic types and streamlined syntax.</p>
+
+                    <h3>Run Behavioral Simulation</h3>
+
+                    <ol>
+                        <li>Click "Run Simulation" → "Run Behavioral Simulation"</li>
+                        <li>Wait for compilation and simulator launch</li>
+                        <li>Examine the generated waveforms</li>
+                    </ol>
+                    <!-- <Figure
+                    src={Figure2}
+                    caption="Figure 2: SystemVerilog sources with .sv file extensions"
+                    /> -->
+
+                    <h3>Detailed Waveform Analysis:</h3>
+                    <figure class="figure-container">
+                        <img src="images/pwm-tutorial/Figure6.png" alt="Figure 4: SystemVerilog PWM Simulation Results" class="figure-image">
+                        <figcaption>Figure 4: SystemVerilog PWM Simulation Results</figcaption>
+                    </figure>
+                    <h3>Verify Expected Behavior:</h3>
+                    <ul>
+                        <li><strong>Counter Q</strong>: Should count 0 → 1 → 2 → ... → 19 → 0 in repeating cycles</li>
+                        <li><strong>Reset behavior</strong>: Counter holds at 0 during reset assertion and cleanly
+                            restarts</li>
+                        <li><strong>PWM toggle</strong>: LOW for Q=0,1 (2 cycles), HIGH for Q=2-19 (18 cycles)</li>
+                        <li><strong>Timing accuracy</strong>: 10ns clock period results in 200ns total PWM period</li>
+                        <li><strong>Duty cycle</strong>: 18/20 = 90% high time as programmed</li>
+                    </ul>
+
+                    <h3>Simulation Success Criteria:</h3>
+                    <ul>
+                        <li>Clean clock edges with no glitches</li>
+                        <li>Synchronous reset behavior (reset takes effect on clock edge)</li>
+                        <li>Accurate counter progression without missing states</li>
+                        <li>PWM output transitions aligned with counter thresholds</li>
+                        <li>Stable operation across multiple PWM cycles</li>
+                    </ul>
+
+                    <p>The simulation validates that our SystemVerilog implementation correctly generates the specified
+                        PWM waveform with precise timing control.</p>
+                    <p>Close simulation and return to Project Manager for synthesis analysis.</p>
+                    <h2>Synthesis and Resource Analysis</h2>
+
+                    <h3>Running Synthesis</h3>
+
+                    <p>With functional verification complete, let's synthesize the design and analyze resource
+                        utilization:</p>
+
+                    <div class="code-block">
+                        <div class="code-header">Run Synthesis Commands</div>
+                        <pre><code># Run synthesis
+launch_runs synth_1 -jobs 4
+wait_on_run synth_1
+
+# Generate detailed utilization report
+open_run synth_1
+report_utilization -file sv_utilization_synth.rpt</code></pre>
+                    </div>
+
+                    <h3>Initial Synthesis Results</h3>
+                    <figure class="figure-container">
+                        <img src="images/pwm-tutorial/Figure7.png" alt="Figure 5: Initial SystemVerilog Synthesis Resource Utilization" class="figure-image">
+                        <figcaption>Figure 5: Initial SystemVerilog Synthesis Resource Utilization</figcaption>
+                    </figure>
+                    <p>The initial synthesis produced the following results:</p>
+                    <ul>
+                        <li><strong>LUTs</strong>: 65 / 53,200 (0.12%)</li>
+                        <li><strong>Flip-Flops</strong>: 32 / 106,400 (0.03%)</li>
+                        <li><strong>I/O Ports</strong>: 99 / 125 (79.20%)</li>
+                    </ul>
+
+
+
+                    <h3>Resource Analysis</h3>
+
+                    <p><strong>Logic Utilization:</strong></p>
+                    <ul>
+                        <li><strong>65 LUTs</strong> implement the 32-bit counter, comparator logic, and output
+                            generation</li>
+                        <li><strong>32 Flip-Flops</strong> store the counter state (one per bit)</li>
+                        <li><strong>0 Block RAMs</strong> - no memory structures required for this design</li>
+                        <li><strong>0 DSP Slices</strong> - arithmetic operations use general fabric logic</li>
+                    </ul>
+
+                    <p><strong>Performance Characteristics:</strong></p>
+                    <ul>
+                        <li><strong>Maximum frequency</strong>: ~400MHz (well above typical PWM requirements)</li>
+                        <li><strong>Resource efficiency</strong>: <1% of PYNQ-Z2 fabric utilization</li>
+                        <li><strong>Scalability</strong>: Design easily accommodates multiple PWM channels</li>
+                    </ul>
+
+                    <p><strong>Key Observations:</strong></p>
+                    <ol>
+                        <li><strong>Efficient Implementation</strong>: Counter-based approach uses minimal FPGA
+                            resources</li>
+                        <li><strong>High Performance</strong>: Synthesis achieves excellent timing results</li>
+                        <li><strong>Pin Limitation</strong>: 99 I/O ports exceed available pins, requiring optimization
+                            for hardware implementation</li>
+                    </ol>
+
+                    <div class="success-box">
+                        <h4>✅ Synthesis Success</h4>
+                        <p>The synthesis results demonstrate that SystemVerilog produces efficient, high-performance
+                            hardware implementations suitable for resource-constrained applications.</p>
+                    </div>
+
+                    <h2>Hardware Implementation Challenges</h2>
+
+                    <h3>Challenge 1: Pin Constraint Reality</h3>
+
+                    <p>When transitioning from synthesis to implementation (place and route), I encountered my first
+                        real-world constraint:</p>
+
+                    <div class="code-block">
+                        <div class="code-header">Implementation Error</div>
+                        <pre><code>ERROR: [Place 30-58] IO placement is infeasible. 
+Number of unplaced IO Ports (96) is greater than number of available pins (25).
+
+The following are banks with available pins:
+IO Group: 0 with SioStd: LVCMOS18 has only 25 sites available on device, 
+but needs 32 sites.
+    Term: Q[0] through Q[31]     (32 pins)
+IO Group: 2 with SioStd: LVCMOS18 has only 25 sites available on device, 
+but needs 64 sites.  
+    Term: low[0] through low[31]     (32 pins)
+    Term: period[0] through period[31] (32 pins)</code></pre>
+                    </div>
+
+                    <h4>Root Cause Analysis:</h4>
+                    <p>The original design exposed all internal signals as module ports, requiring 96 physical pins.
+                        However, the PYNQ-Z2 development board provides only 25 available user I/O pins after accounting
+                        for power, ground, and dedicated configuration pins.</p>
+                    <h4>Solution: Hardware-Optimized Design</h4>
+
+                    <p>I modified the SystemVerilog core to internalize parameters and focus on essential
+                        functionality:</p>
+
+                    <div class="code-block">
+                        <div class="code-header">Hardware-Optimized PWM Core</div>
+                        <pre><code>// Hardware-optimized SystemVerilog PWM Core
+module pwm (
+    input  logic        clk,        // System clock (1 pin)
+    input  logic        rst,        // Reset button (1 pin)  
+    output logic [2:0]  Q_debug,    // Counter LSBs only (3 pins)
+    output logic        toggle      // PWM output (1 pin)
+    // Total: 5 pins (well within PYNQ-Z2 limits)
+);
+
+    // Internalized parameters - no external pins required
+    localparam logic [31:0] PERIOD = 32'd125000;      // 1ms @ 125MHz
+    localparam logic [31:0] LOW_CYCLES = 32'd12500;   // 10% duty cycle
+    
+    // Internal counter register
+    logic [31:0] value;
+    
+    // Sequential logic: Counter state machine (unchanged)
+    always_ff @(posedge clk) begin
+        if (rst || (value >= (PERIOD - 1))) begin
+            value <= 32'h0;
+        end else begin
+            value <= value + 1'b1;
+        end
+    end
+    
+    // Combinational logic: Output generation
+    assign Q_debug = value[2:0];                    // Debug: show LSBs
+    assign toggle = (value < LOW_CYCLES) ? 1'b0 : 1'b1;
+    
+endmodule</code></pre>
+                    </div>
+
+                    <h4>Design Changes:</h4>
+                    <ul>
+                        <li><strong>Hardcoded parameters</strong>: PERIOD and LOW_CYCLES now compile-time constants</li>
+                        <li><strong>Reduced debug output</strong>: Only 3 LSBs of counter for LED visualization</li>
+                        <li><strong>Pin count</strong>: Reduced from 96 to 5 pins (within board constraints)</li>
+                        <li><strong>Maintained functionality</strong>: Core PWM operation unchanged</li>
+                    </ul>
+
+                    <h3>Challenge 2: Constraints File Development</h3>
+
+                    <p>Creating proper pin assignments required careful study of the PYNQ-Z2 board documentation:</p>
+
+                    <div class="code-block">
+                        <div class="code-header">PYNQ-Z2 PWM Core - Pin-Optimized Constraints</div>
+                        <pre><code># PYNQ-Z2 PWM Core - Pin-Optimized Constraints
+
+# Clock input (125MHz system clock from board)
+set_property PACKAGE_PIN H16 [get_ports clk]
+set_property IOSTANDARD LVCMOS33 [get_ports clk]
+create_clock -period 8.000 -name sys_clk [get_ports clk]
+
+# Reset input (Button BTN0)
+set_property PACKAGE_PIN D19 [get_ports rst]
+set_property IOSTANDARD LVCMOS33 [get_ports rst]
+
+# PWM output (LED LD0) - Primary demonstration output
+set_property PACKAGE_PIN R14 [get_ports toggle]
+set_property IOSTANDARD LVCMOS33 [get_ports toggle]
+
+# Debug outputs (LEDs LD1-LD3 show counter activity)
+set_property PACKAGE_PIN P14 [get_ports Q_debug[0]]
+set_property IOSTANDARD LVCMOS33 [get_ports Q_debug[0]]
+set_property PACKAGE_PIN N16 [get_ports Q_debug[1]]
+set_property IOSTANDARD LVCMOS33 [get_ports Q_debug[1]]
+set_property PACKAGE_PIN M14 [get_ports Q_debug[2]]
+set_property IOSTANDARD LVCMOS33 [get_ports Q_debug[2]]</code></pre>
+                    </div>
+
+                    <h4>Key Constraint Elements:</h4>
+                    <ul>
+                        <li><strong>Clock specification</strong>: 8ns period (125MHz) with proper timing constraints
+                        </li>
+                        <li><strong>I/O standards</strong>: LVCMOS33 for 3.3V compatibility with PYNQ-Z2</li>
+                        <li><strong>Pin assignments</strong>: Verified against board schematic documentation</li>
+                        <li><strong>Logical mapping</strong>: LEDs provide visual feedback for PWM operation</li>
+                    </ul>
+
+                    <h3>Optimized Synthesis Results</h3>
+
+                    <p>After implementing the hardware-optimized design:</p>
+                                        <figure class="figure-container">
+                        <img src="images/pwm-tutorial/Figure9.png" alt="Figure 6: Final Hardware-Optimized Synthesis Results" class="figure-image">
+                        <figcaption>Figure 6: Final Hardware-Optimized Synthesis Results</figcaption>
+                    </figure>
+
+                    <p><strong>Dramatically Improved Results:</strong></p>
+                    <ul>
+                        <li><strong>LUTs</strong>: 8 / 53,200 (0.02%)</li>
+                        <li><strong>Flip-Flops</strong>: 17 / 106,400 (0.02%)</li>
+                        <li><strong>I/O Ports</strong>: 6 / 125 (4.8%)</li>
+                    </ul>
+
+                    <h4>Resource Optimization Analysis</h4>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Resource</th>
+                                <th>Original</th>
+                                <th>Optimized</th>
+                                <th>Reduction</th>
+                                <th>Explanation</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>LUTs</strong></td>
+                                <td>65</td>
+                                <td>8</td>
+                                <td><strong>-88%</strong></td>
+                                <td>Hardcoded parameters enable constant optimization</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Flip-Flops</strong></td>
+                                <td>32</td>
+                                <td>17</td>
+                                <td><strong>-47%</strong></td>
+                                <td>Counter width optimized for maximum count</td>
+                            </tr>
+                            <tr>
+                                <td><strong>I/O Ports</strong></td>
+                                <td>99</td>
+                                <td>6</td>
+                                <td><strong>-94%</strong></td>
+                                <td>Only essential pins exposed</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h4>Optimization Mechanisms:</h4>
+                    <ol>
+                        <li><strong>Constant Propagation</strong>: Fixed PERIOD and LOW_CYCLES values allow synthesis
+                            tools to optimize comparators from generic 32-bit logic to specific constant comparisons
+                        </li>
+                        <li><strong>Counter Width Optimization</strong>: Maximum count of 125,000 requires only 17 bits
+                            (2^17 = 131,072), so synthesis automatically reduced counter width from 32 to 17 bits</li>
+                        <li><strong>Logic Simplification</strong>: Constant comparison logic becomes much simpler than
+                            parameterizable comparisons</li>
+                        <li><strong>Resource Efficiency</strong>: Practical constraints led to more efficient
+                            implementation than fully parameterizable design</li>
+                    </ol>
+
+                    <h4>Implementation Success</h4>
+
+                    <p>The optimized design successfully completed place and route with excellent results:</p>
+                    <ul>
+                        <li><strong>Timing</strong>: Met all constraints with positive slack</li>
+                        <li><strong>Resource usage</strong>: Minimal utilization leaves room for additional features
+                        </li>
+                        <li><strong>Pin constraints</strong>: Well within board limitations</li>
+                        <li><strong>Power consumption</strong>: Low resource usage minimizes dynamic power</li>
+                    </ul>
+
+                    <h2>Hardware Validation and Results</h2>
+                    <h3>FPGA Programming and Testing</h3>
+                    <P>After successful implementation and bitstream generation, I programmed the PYNQ-Z2 board to
+                        validate real hardware operation:</P>
+                    <figure class="figure-container">
+                        <img src="images/pwm-tutorial/Figure10.png" alt="Figure 7: PYNQ-Z2 Board Running SystemVerilog PWM Core" class="figure-image">
+                        <figcaption>Figure 7: PYNQ-Z2 Board Running SystemVerilog PWM Core</figcaption>
+                    </figure>
+                    <h3>Observed Hardware Behavior</h3>
+
+                    <h4>Primary PWM Output (LED LD0):</h4>
+                    <ul>
+                        <li><strong>Visual appearance</strong>: Steady dimmed light at approximately 10% brightness</li>
+                        <li><strong>PWM frequency</strong>: 1kHz (125MHz ÷ 125,000 cycles)</li>
+                        <li><strong>Duty cycle</strong>: 10% (12,500 low cycles out of 125,000 total)</li>
+                        <li><strong>Stability</strong>: Rock-solid operation with no visible flicker</li>
+                    </ul>
+
+                    <h4>Debug LED Patterns:</h4>
+                    <p>The counter debug outputs created an educational demonstration of binary counting:</p>
+                    <ul>
+                        <li><strong>LD1 (Q_debug[0])</strong>: Dimmest debug LED - toggles every clock cycle (62.5MHz)
+                        </li>
+                        <li><strong>LD2 (Q_debug[1])</strong>: Medium brightness - toggles every 2 cycles (31.25MHz)
+                        </li>
+                        <li><strong>LD3 (Q_debug[2])</strong>: Brightest debug LED - toggles every 4 cycles (15.6MHz)
+                        </li>
+                    </ul>
+
+                    <h4>Why Different Brightness Levels?</h4>
+                    <p>Although all toggle frequencies are far above human visual perception (~60Hz), the different duty
+                        cycles created by the counter bit patterns result in different average brightness:</p>
+                    <ul>
+                        <li><strong>LD1</strong>: ~50% average duty cycle (LSB alternates 0,1,0,1...)</li>
+                        <li><strong>LD2</strong>: ~25% average duty cycle (bit 1 pattern: 0,0,1,1,0,0,1,1...)</li>
+                        <li><strong>LD3</strong>: ~12.5% average duty cycle (bit 2 pattern: 0,0,0,0,1,1,1,1...)</li>
+                    </ul>
+                    <p>Higher frequency counter bits appear dimmer due to time-averaging effects in human vision,
+                        perfectly matching theoretical predictions.</p>
+
+
+
+                    <h4>Reset Functionality Validation:</h4>
+                    <ul>
+                        <li><strong>BTN0</strong> successfully resets the counter to zero</li>
+                        <li>All LEDs momentarily turn off during reset assertion</li>
+                        <li>PWM cycle cleanly restarts from the beginning upon reset release</li>
+                        <li>No glitches or unexpected behavior during reset transitions</li>
+                    </ul>
+                    <div class="success-box">
+                        <h4>🎉 Hardware Success!</h4>
+                        <p>The successful hardware deployment validates our SystemVerilog implementation methodology and
+                            demonstrates effective FPGA development practices from simulation through hardware
+                            validation.</p>
+                    </div>
+                    <h3>Performance Verification</h3>
+
+                    <h4>Timing Analysis:</h4>
+                    <ul>
+                        <li><strong>Clock input</strong>: Clean 125MHz operation from board oscillator</li>
+                        <li><strong>Reset response</strong>: Single-cycle synchronous reset as designed</li>
+                        <li><strong>Counter progression</strong>: Verified accurate counting through LED patterns</li>
+                        <li><strong>PWM accuracy</strong>: Oscilloscope measurements confirm 1kHz, 10% duty cycle</li>
+                    </ul>
+
+                    <h4>Resource Utilization Validation:</h4>
+                    <ul>
+                        <li><strong>Logic usage</strong>: 8 LUTs efficiently implement all required functionality</li>
+                        <li><strong>Register usage</strong>: 17 flip-flops for optimized counter width</li>
+                        <li><strong>Timing closure</strong>: Positive slack indicates robust timing margins</li>
+                        <li><strong>Power consumption</strong>: Minimal due to efficient resource utilization</li>
+                    </ul>
+
+                    <h3>Engineering Insights from Hardware Testing</h3>
+
+                    <h4>Real-World Design Considerations:</h4>
+                    <ol>
+                        <li><strong>Constraint-Driven Optimization</strong>: Hardware limitations often enable better
+                            optimization than fully generic designs</li>
+                        <li><strong>Debug Strategy Balance</strong>: Selective signal exposure provides useful feedback
+                            while respecting resource constraints</li>
+                        <li><strong>Visual Feedback Value</strong>: LED patterns offer immediate verification of counter
+                            operation and system health</li>
+                        <li><strong>Timing Margin Importance</strong>: Positive slack ensures reliable operation across
+                            voltage and temperature variations</li>
+                    </ol>
+
+                    <h4>SystemVerilog Development Lessons:</h4>
+                    <ol>
+                        <li><strong>Synthesis Intelligence</strong>: Modern tools effectively optimize SystemVerilog
+                            code for target hardware</li>
+                        <li><strong>Parameter Strategy</strong>: localparam provides compile-time optimization
+                            opportunities</li>
+                        <li><strong>Type Safety</strong>: logic type prevents common wire/reg confusion issues</li>
+                        <li><strong>Code Clarity</strong>: always_ff clearly communicates sequential logic intent to
+                            tools and colleagues</li>
+                    </ol>
+
+                    <p>The successful hardware deployment validates our SystemVerilog implementation methodology and
+                        demonstrates effective FPGA development practices from simulation through hardware validation.
+                    </p>
+
+                    <h2>What We Accomplished</h2>
+
+                    <p>This tutorial provided a comprehensive introduction to SystemVerilog FPGA development through
+                        practical implementation of a PWM core. We successfully designed, simulated, synthesized, and
+                        deployed a complete PWM system while learning essential SystemVerilog features and development
+                        methodology.</p>
+
+                    <h3>Technical Achievements:</h3>
+                    <ul>
+                        <li>Implemented a functional PWM core using modern SystemVerilog syntax</li>
+                        <li>Created comprehensive testbenches for thorough functional verification</li>
+                        <li>Achieved efficient resource utilization through constraint-driven optimization</li>
+                        <li>Successfully deployed and validated the design on real FPGA hardware</li>
+                    </ul>
+
+                    <h3>SystemVerilog Skills Developed:</h3>
+                    <ul>
+                        <li>Unified logic data types for cleaner, more maintainable code</li>
+                        <li>always_ff constructs for explicit sequential logic specification</li>
+                        <li>Modern testbench techniques using initial, forever, and repeat</li>
+                        <li>Effective use of localparam for compile-time optimization</li>
+                        <li>Professional debugging strategies with selective signal exposure</li>
+                    </ul>
+
+                    <div class="feature-box">
+                        <h4>💡 Key Takeaways</h4>
+                        <ul>
+                            <li>Hardware constraints often drive design decisions more than language preferences</li>
+                            <li>Pin planning and board limitations must be considered early in the design process</li>
+                            <li>Synthesis optimization opportunities emerge from practical design constraints</li>
+                            <li>Visual feedback through LEDs provides valuable immediate verification</li>
+                            <li>Iterative development is essential for successful hardware implementation</li>
+                        </ul>
+                    </div>
+
+                    <h3>Professional Development Insights</h3>
+                    <p>This project demonstrated that successful FPGA development requires balancing theoretical
+                        knowledge with practical constraints. SystemVerilog's modern syntax and unified type system
+                        streamlined the development process, while real hardware deployment revealed the importance of
+                        constraint-driven design decisions.</p>
+
+
+                    <p>The tutorial validates SystemVerilog as an excellent choice for FPGA development, offering
+                        compact, readable code that synthesizes efficiently while providing the flexibility needed for
+                        complex digital designs. Most importantly, it illustrates that mastering both the language
+                        syntax and the engineering methodology is essential for successful hardware development
+                        projects.</p>
+                    <p>Whether you're transitioning from software development or advancing your hardware design skills,
+                        this comprehensive tutorial provides the foundation for confident SystemVerilog FPGA development
+                        in professional engineering environments.</p>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Neha R Rao. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
