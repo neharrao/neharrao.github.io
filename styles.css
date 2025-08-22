@@ -457,6 +457,12 @@ section {
     line-height: 1.7;
 }
 
+/* Make sub-job-timeline smaller */
+.sub-job-timeline {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+}
+
 /* Projects */
 .projects-grid {
     display: grid;
