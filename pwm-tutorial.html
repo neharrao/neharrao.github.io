@@ -203,6 +203,26 @@
             border-radius: 0 0 var(--radius-lg) var(--radius-lg);
         }
 
+        .figure-container {
+            margin: var(--space-8) 0;
+            text-align: center;
+        }
+
+        .figure-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+        }
+
+        .figure-container figcaption {
+            margin-top: var(--space-4);
+            font-style: italic;
+            color: var(--text-secondary);
+            font-size: var(--font-size-sm);
+        }
+
         .back-link {
             display: inline-flex;
             align-items: center;
@@ -637,7 +657,10 @@ update_compile_order -fileset sources_1</code></pre>
 
                     <p>You should now see the SystemVerilog project configured for the PYNQ-Z2 board. The Project
                         Summary shows our target device and SystemVerilog source files ready for development.</p>
-                    <!-- IMAGE HERE FIGURE 1 caption="Figure 1: SystemVerilog Project Summary"-->
+                    <figure class="figure-container">
+                        <img src="images/pwm-tutorial/Figure1.png" alt="Figure 1: SystemVerilog Project Summary" class="figure-image">
+                        <figcaption>Figure 1: SystemVerilog Project Summary</figcaption>
+                    </figure>
                     <p>The project is now ready for simulation, synthesis, and hardware implementation with all
                         SystemVerilog files properly integrated.</p>
 
@@ -651,7 +674,10 @@ update_compile_order -fileset sources_1</code></pre>
                         <li>Double-click on <strong>pwm_tb.sv</strong> to inspect testbench</li>
                         <li>Verify syntax highlighting and check for any error indicators</li>
                     </ol>
-                    <!-- IMAGE HERE FIGURE 2 WITH CAPTIONFigure 2: SystemVerilog sources with .sv file extensions -->
+                    <figure class="figure-container">
+                        <img src="images/pwm-tutorial/Figure2.png" alt="Figure 2: SystemVerilog sources with .sv file extensions" class="figure-image">
+                        <figcaption>Figure 2: SystemVerilog sources with .sv file extensions</figcaption>
+                    </figure>
                     <p>The syntax highlighting should immediately show SystemVerilog's more compact structure with
                         unified logic types and streamlined syntax.</p>
 
@@ -668,10 +694,10 @@ update_compile_order -fileset sources_1</code></pre>
                     /> -->
 
                     <h3>Detailed Waveform Analysis:</h3>
-                    <!-- <Figure
-                    src={Figure6}  
-                    caption="Figure 4: SystemVerilog PWM Simulation Results"
-                    /> -->
+                    <figure class="figure-container">
+                        <img src="images/pwm-tutorial/Figure6.png" alt="Figure 4: SystemVerilog PWM Simulation Results" class="figure-image">
+                        <figcaption>Figure 4: SystemVerilog PWM Simulation Results</figcaption>
+                    </figure>
                     <h3>Verify Expected Behavior:</h3>
                     <ul>
                         <li><strong>Counter Q</strong>: Should count 0 → 1 → 2 → ... → 19 → 0 in repeating cycles</li>
@@ -713,10 +739,10 @@ report_utilization -file sv_utilization_synth.rpt</code></pre>
                     </div>
 
                     <h3>Initial Synthesis Results</h3>
-                    <!-- <Figure
-                    src={Figure7}
-                    caption="Figure 5: Initial SystemVerilog Synthesis Resource Utilization"
-                    /> -->
+                    <figure class="figure-container">
+                        <img src="images/pwm-tutorial/Figure7.png" alt="Figure 5: Initial SystemVerilog Synthesis Resource Utilization" class="figure-image">
+                        <figcaption>Figure 5: Initial SystemVerilog Synthesis Resource Utilization</figcaption>
+                    </figure>
                     <p>The initial synthesis produced the following results:</p>
                     <ul>
                         <li><strong>LUTs</strong>: 65 / 53,200 (0.12%)</li>
@@ -874,10 +900,10 @@ set_property IOSTANDARD LVCMOS33 [get_ports Q_debug[2]]</code></pre>
                     <h3>Optimized Synthesis Results</h3>
 
                     <p>After implementing the hardware-optimized design:</p>
-                    <!-- <Figure
-                     src={Figure9}
-                     caption="Figure 6: Final Hardware-Optimized Synthesis Results"
-                 /> -->
+                                        <figure class="figure-container">
+                        <img src="images/pwm-tutorial/Figure9.png" alt="Figure 6: Final Hardware-Optimized Synthesis Results" class="figure-image">
+                        <figcaption>Figure 6: Final Hardware-Optimized Synthesis Results</figcaption>
+                    </figure>
 
                     <p><strong>Dramatically Improved Results:</strong></p>
                     <ul>
@@ -951,10 +977,10 @@ set_property IOSTANDARD LVCMOS33 [get_ports Q_debug[2]]</code></pre>
                     <h3>FPGA Programming and Testing</h3>
                     <P>After successful implementation and bitstream generation, we programmed the PYNQ-Z2 board to
                         validate real hardware operation:</P>
-                    <!-- <Figure
-                    src={Figure10}
-                    caption="Figure 7: PYNQ-Z2 Board Running SystemVerilog PWM Core"
-                /> -->
+                    <figure class="figure-container">
+                        <img src="images/pwm-tutorial/Figure10.png" alt="Figure 7: PYNQ-Z2 Board Running SystemVerilog PWM Core" class="figure-image">
+                        <figcaption>Figure 7: PYNQ-Z2 Board Running SystemVerilog PWM Core</figcaption>
+                    </figure>
                     <h3>Observed Hardware Behavior</h3>
 
                     <h4>Primary PWM Output (LED LD0):</h4>
