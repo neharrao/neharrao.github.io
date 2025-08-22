@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog - Neha R Rao</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="index.html" onclick="window.open('index.html', '_self');">NRR.</a>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="blog.html" class="active">Blog</a></li>
+                        <li class="nav-separator">|</li>
+                        <li><a href="index.html" onclick="window.open('index.html', '_self');">Portfolio</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <!-- Blog Hero Section -->
+            <section id="blog-hero">
+                <div class="hero-content">
+                    <h1 class="hero-title">My Blog</h1>
+                    <p class="hero-subtitle">
+                        Thoughts on hardware design, FPGA development, and the journey of building reliable systems.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Blog Posts Section -->
+            <section id="blog-posts">
+                <div class="section-header">
+                    <h2 class="section-title">Latest Posts</h2>
+                </div>
+                
+                <div class="blog-grid">
+                    <!-- Blog Post 1 -->
+                    <article class="blog-card card">
+                        <div class="blog-image">
+                            <img src="images/pynqz2.jpeg" alt="SystemVerilog PWM Core" class="project-image">
+                        </div>
+                        <div class="blog-content">
+                            <div class="blog-meta">
+                                <span class="blog-date">August 6, 2025</span>
+                                <span class="blog-category">SystemVerilog</span>
+                            </div>
+                            <h3 class="blog-title">Creating a SystemVerilog PWM Core: From Simulation to Hardware</h3>
+                            <p class="blog-excerpt">
+                                Complete tutorial for implementing a PWM core in SystemVerilog, from design through synthesis and hardware deployment on PYNQ-Z2. Learn modern SystemVerilog design methodology, synthesis optimization techniques, and real-world hardware implementation challenges.
+                            </p>
+                            <a href="pwm-tutorial.html" class="blog-link">Read More →</a>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Newsletter Section -->
+            <section id="newsletter">
+                <div class="section-header">
+                    <h2 class="section-title">Stay Updated</h2>
+                    <p class="section-subtitle">Get notified when I publish new posts about hardware design and embedded systems.</p>
+                </div>
+                <div class="newsletter-form">
+                    <form action="https://formspree.io/f/movlgvbb" method="POST" class="contact-form">
+                        <div class="form-group">
+                            <label for="newsletter-email">Email Address</label>
+                            <input type="email" id="newsletter-email" name="newsletter-email" placeholder="Enter your email" required>
+                        </div>
+                        <button type="submit" class="submit-btn">
+                            <span class="btn-text">Subscribe to Newsletter</span>
+                        </button>
+                    </form>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Neha R Rao. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <button id="scrollToTopBtn">
+        <svg viewBox="-3 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+            <g id="SVGRepo_iconCarrier">
+                <g id="icomoon-ignore"> </g>
+                <path d="M26.221 16c0-7.243-5.871-13.113-13.113-13.113s-13.113 5.87-13.113 13.113c0 7.242 5.871 13.113 13.113 13.113s13.113-5.871 13.113-13.113zM1.045 16c0-6.652 5.412-12.064 12.064-12.064s12.064 5.412 12.064 12.064c0 6.652-5.411 12.064-12.064 12.064-6.652 0-12.064-5.412-12.064-12.064z" fill="currentColor"> </path>
+                <path d="M18.746 15.204l0.742-0.742-6.379-6.379-6.378 6.379 0.742 0.742 5.112-5.112v12.727h1.049v-12.727z" fill="currentColor"> </path>
+            </g>
+        </svg>
+    </button>
+
+    <script src="script.js"></script>
+</body>
+
+</html> 
